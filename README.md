@@ -1,0 +1,22 @@
+# Small and secure minecraft server in a docker container
+
+A simple minecraft server container, supporting mainline and Forge servers. Unlike other docker minecraft servers, it does not need to download anything when starting.
+It's fully pre-built, so it starts quickly.
+
+## Running
+
+Create a file with a name of your server and extension .env using the `server.env.example` as an example. Then run
+
+        ./run.sh <server_name>
+
+By running it you accept the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula)
+
+## Building
+
+Run `build-image.sh` with the Minecraft Server Version or "latest" for the latest version. If the version ends in "-forge" then the forge server will be built.
+
+## Tools
+
+* To communicate with the server inside the container use `cmd.sh`
+* To backup world files run `backup.sh`
+* To stop the server run `stop.sh` or type `stop` in the server console
