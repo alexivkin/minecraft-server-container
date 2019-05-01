@@ -1,10 +1,10 @@
 #!/bin/sh
 
-if ! touch /data/.verify_access; then
-  echo "ERROR: /data doesn't seem to be writable. Please make sure attached directory is writable by uid=$(id -u)"
+if ! touch /data/world/.verify_access; then
+  echo "ERROR: /data/world/ doesn't seem to be writable. Please make sure attached directory is writable by uid=$(id -u)"
   exit 2
 fi
-rm /data/.verify_access
+rm /data/world/.verify_access
 
 if [[ -z "$MEMORY" || -z "$CPUCOUNT" ]]; then # quotes needed here cause of the -z and the || on the alpine sh
     echo Please specify \$MEMORY and \$CPUCOUNT parameters
@@ -19,6 +19,11 @@ fi
 if [[ $WHITELIST ]]; then # -a ! -e white-list.txt.converted ]; then
   echo "Setting whitelist"
   echo $WHITELIST | awk -v RS=, '{print}' >> /data/white-list.txt
+fi
+
+if [[ "$SERVERPROPS" ]]; then
+  echo "Setting server.properties"
+  echo "$SERVERPROPS" >> /data/server.properties
 fi
 
 # start forge if one exists

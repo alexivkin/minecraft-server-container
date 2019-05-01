@@ -1,0 +1,7 @@
+*.jar
+*.env
+server.properties
+\!*
+*.bak
+.build-cache/
+world-*

@@ -52,14 +52,14 @@ mkdir -p $verfolder
 cd $verfolder
 
 if [[ $forge ]]; then
-    ../download-forge-server.sh $MAINLINE_VERSION
+    ../../download-forge-server.sh $MAINLINE_VERSION
 else
     mkdir -p libraries
-    ../download-minecraft-server.sh $MAINLINE_VERSION
+    ../../download-minecraft-server.sh $MAINLINE_VERSION
 fi
 
-cd ..
-cp minecraft-server.sh server.properties Dockerfile $verfolder
+cd ../..
+cp minecraft-server.sh Dockerfile "$verfolder"
 
 docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG
 

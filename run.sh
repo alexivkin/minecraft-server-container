@@ -19,8 +19,9 @@ fi
 # source all the configs now, including version
 . $CONFIG
 
-mkdir -p world-$NAME
-echo "$SERVER_PROPS" > world-$NAME/server.properties
-
+# pre-create the folder so docker does not create it as root
+mkdir -p $(pwd)/world-$NAME
 # should run with -i so the STDIO remains attached, but without -t so commands can be piped (a pipe is not a TTY)
-docker run --name minecraft-server-$NAME -i --env-file $CONFIG -p $PORT:25565 -v $(pwd)/world-$NAME:/data/world --restart unless-stopped alexivkin/minecraft-server:$VER
+# cant use --env-file $CONFIG - does not support multiline envs
+
+docker run --restart unless-stopped --name minecraft-server-$NAME -di -e MEMORY=$MEMORY -e CPUCOUNT=$CPUCOUNT -e OPS=$OPS -e WHITELIST=$WHITELIST -e SERVERPROPS="$SERVERPROPS" -p $PORT:25565 -v $(pwd)/world-$NAME:/data/world alexivkin/minecraft-server:$VER
