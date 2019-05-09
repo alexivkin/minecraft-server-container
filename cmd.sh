@@ -17,5 +17,5 @@ NAME=${CONFIG%%.*}
 time=$(date +%Y-%m-%dT%T.%N)
 # assumes there is one java process runnning in the container
 #docker exec minecraft-server-$NAME "echo ${@:2} > /proc/$(pgrep -f minecraft_server)/fd/0"
-docker exec minecraft-server-$NAME sh -c 'echo "'${@:2}'" > /proc/$(pgrep -f minecraft_server)/fd/0'
-docker logs --since "$time" $containerid
+docker exec minecraft-server-$NAME sh -c 'echo "'${@:2}'" > /proc/$(pgrep -f ^java)/fd/0'
+docker logs --since "$time" minecraft-server-$NAME
