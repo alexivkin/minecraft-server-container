@@ -3,19 +3,17 @@
 set -euo pipefail
 
 if [[ $# -eq 0 ]]; then
-    echo Give me the name of the server .env file, then the command
+    echo Give me the name of the server .env file, then the command. The command with spaces does not need to be quote escaped.
     exit 0
 fi
 
 # run a server commend and show output
-# only works if there is one container
-#containerid=$(docker ps -aq --filter ancestor=alexivkin/minecraft-server --format="{{.ID}}")
-
 CONFIG=$1 #"$NAME.env"
 NAME=${CONFIG%%.*}
 
 time=$(date +%Y-%m-%dT%T.%N)
-# assumes there is one java process runnning in the container
-#docker exec minecraft-server-$NAME "echo ${@:2} > /proc/$(pgrep -f minecraft_server)/fd/0"
-docker exec minecraft-server-$NAME sh -c 'echo "'${@:2}'" > /proc/$(pgrep -f ^java)/fd/0'
+# grab all commands past the first argument
+commands="${@:2}"
+# crazy quoting below to allow passing commands from the command line with spaces in them
+docker exec minecraft-server-$NAME sh -c 'echo "'"$commands"'" > /proc/$(pgrep -f ^java)/fd/0'
 docker logs --since "$time" minecraft-server-$NAME
