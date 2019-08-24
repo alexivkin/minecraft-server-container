@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # get the latest version and build the latest
 if [[ $# -eq 0 ]]; then
     echo Specify the version or "latest"

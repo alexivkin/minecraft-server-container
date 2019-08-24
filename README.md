@@ -15,6 +15,10 @@ By running it you accept the [Minecraft EULA](https://account.mojang.com/documen
 
 Run `build-image.sh` with the Minecraft Server Version or "latest" for the latest version. If the version ends in "-forge" then the forge server will be built.
 
+## Mods
+
+Everything fron the world-$NAME-extras/ foldeer will be copied under /data/ during the server start, so you can put your mods/ and shaderpacks/ there
+
 ## Tools
 
 * To communicate with the server inside the container use `cmd.sh`

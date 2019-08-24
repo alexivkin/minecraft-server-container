@@ -17,7 +17,11 @@ RUN umask 0002  && \
     adduser -Ss /bin/false -u $UID -G minecraft -h /home/minecraft minecraft  && \
     chown -R minecraft:minecraft /data /home/minecraft  && \
     echo "eula=true" >> /data/eula.txt  && \
-    chmod 755 /minecraft-server.sh  && \
+    chmod 755 /minecraft-server.sh
+
+# run forge installer if present
+RUN cd data && \
+    if ls forge-*-installer.jar 1> /dev/null 2>&1; then java -jar forge-*-installer.jar --installServer; rm forge-*-installer.jar; fi && \
     chown minecraft:minecraft /data/*
 
 EXPOSE 25565

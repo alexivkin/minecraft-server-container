@@ -26,6 +26,11 @@ if [[ "$SERVERPROPS" ]]; then
   echo "$SERVERPROPS" >> /data/server.properties
 fi
 
+if ls /extras/* 1> /dev/null 2>&1; then
+  echo "Copying extras to /data/"
+  cp -a /extras/* /data/
+fi
+
 # start forge if one exists
 if [[ -f forge*.jar ]]; then
     java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar forge*.jar nogui
