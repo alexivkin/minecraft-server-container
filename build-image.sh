@@ -33,17 +33,17 @@ if [[ "$MAINLINE_URL" == "null" ]]; then
 fi
 
 # check if the forge version for this serevr exists
-if [[ $forge ]]; then
-    FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-recommended\"]")
-    if [ $FORGE_VERSION = null ]; then
+#if [[ $forge ]]; then
+#    FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-recommended\"]")
+#    if [ $FORGE_VERSION = null ]; then
         FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-latest\"]")
         if [ $FORGE_VERSION = null ]; then
             FORGE_SUPPORTED_VERSIONS=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r '.promos| keys[] | rtrimstr("-latest") | rtrimstr("-recommended")' | sort -u | tr '\n' ' ')
             echo "Version $MAINLINE_VERSION is not supported by Forge. Supported versions are $FORGE_SUPPORTED_VERSIONS"
             exit 2
         fi
-    fi
-fi
+#    fi
+#fi
 
 echo Preparing the context...
 
@@ -61,7 +61,7 @@ fi
 cd ../..
 cp minecraft-server.sh Dockerfile "$verfolder"
 
-docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG
+docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG --build-arg FORGE_INSTALLER="forge-$MAINLINE_VERSION-$FORGE_VERSION-installer.jar"
 
 if [[ $1 == "latest" ]]; then
     docker tag alexivkin/minecraft-server:$VERSION_TAG latest

@@ -3,8 +3,14 @@
 set -euo pipefail
 
 if [[ $# -eq 0 ]]; then
-    echo Give me the name of the server .env file
+    echo "Give me the name of the server .env file. Use -f option to run in the foreground mode"
     exit 0
+fi
+# choose interactive (foreground) or server (background) docker options
+if [[ $# -eq 2 && $2 == "-f" ]]; then
+    runopt="-it --rm"
+else
+    runopt="-d --restart unless-stopped -i"
 fi
 
 # Check if the container is already running, then stop/remove it
@@ -46,7 +52,6 @@ mkdir -p $(pwd)/world-$NAME-extras
 
 check_and_stop minecraft-server-$NAME
 
-docker run -d --restart unless-stopped --name minecraft-server-$NAME -i -e MEMORY=$MEMORY -e CPUCOUNT=$CPUCOUNT -e OPS=$OPS -e WHITELIST=$WHITELIST -e SERVERPROPS="$SERVERPROPS" -p $PORT:25565 -v $(pwd)/world-$NAME:/data/world -v $(pwd)/world-$NAME-extras:/extras alexivkin/minecraft-server:$VER
-
+docker run $runopt --name minecraft-server-$NAME -e MEMORY=$MEMORY -e CPUCOUNT=$CPUCOUNT -e OPS=$OPS -e WHITELIST=$WHITELIST -e SERVERPROPS="$SERVERPROPS" -p $PORT:25565 -v $(pwd)/world-$NAME:/data/world -v $(pwd)/world-$NAME-extras:/extras alexivkin/minecraft-server:$VER
 #echo ">>> Tailing logs..."
 #docker logs -f minecraft-server-$NAME

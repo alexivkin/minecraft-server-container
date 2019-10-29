@@ -18,7 +18,7 @@ NAME=${CONFIG%%.*}
 
 # sanity checks
 if [[ ! -f $CONFIG ]]; then
-    echo "Missing configuration file $CONFIG. It's a bash env file settings"
+    echo "Missing configuration file '$CONFIG'. Expected a bash env file with settings"
     exit 1
 fi
 
@@ -26,9 +26,9 @@ fi
 . $CONFIG
 
 if [[ $force == "false" ]]; then
-    ./cmd.sh $CONFIG say "SERVER SHUTTING DOWN IN 10 SECONDS. Saving map..."
+    ./cmd.sh $CONFIG say "SERVER SHUTTING DOWN. Saving map..."
     ./cmd.sh $CONFIG save-all
-    sleep 10
+    #sleep 10
     ./cmd.sh $CONFIG stop
     sleep 2
 fi

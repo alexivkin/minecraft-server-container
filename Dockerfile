@@ -20,8 +20,9 @@ RUN umask 0002  && \
     chmod 755 /minecraft-server.sh
 
 # run forge installer if present
+ARG FORGE_INSTALLER
 RUN cd data && \
-    if ls forge-*-installer.jar 1> /dev/null 2>&1; then java -jar forge-*-installer.jar --installServer; rm forge-*-installer.jar; fi && \
+    if ls $FORGE_INSTALLER 1> /dev/null 2>&1; then java -jar $FORGE_INSTALLER --installServer; rm $FORGE_INSTALLER; fi && \
     chown minecraft:minecraft /data/*
 
 EXPOSE 25565
