@@ -48,7 +48,6 @@ mkdir -p $(pwd)/world-$NAME-extras
 
 # should run with -i so the STDIO remains attached, but without -t so commands can be piped (a pipe is not a TTY)
 # cant use --env-file $CONFIG - does not support multiline envs
-# debug
 
 check_and_stop minecraft-server-$NAME
 

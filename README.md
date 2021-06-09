@@ -7,9 +7,11 @@ It's fully pre-built, so it starts quickly.
 
 Create a file with a name of your server and extension .env using the `server.env.example` as an example. Then run
 
-        ./run.sh <server_name>
+        ./run.sh <server_name> [-f]
 
 By running it you accept the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula)
+
+`-f` will run the server in the foreground
 
 ## Building
 
