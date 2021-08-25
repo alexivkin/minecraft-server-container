@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if [[ $# -eq 0 ]]; then
-    echo Specify the Minecraft Mainline Server Version or "latest" for the latest version. If it ends in "-forge" then the forge server will be built
+    echo "Specify the Minecraft Mainline Server Version or "latest" for the latest version. If it ends in "-forge" then the forge server will be built"
     exit 0
 fi
 
@@ -33,19 +33,21 @@ if [[ "$MAINLINE_URL" == "null" ]]; then
 fi
 
 # check if the forge version for this serevr exists
-#if [[ $forge ]]; then
-#    FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-recommended\"]")
-#    if [ $FORGE_VERSION = null ]; then
+if [[ $forge ]]; then
+    FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-recommended\"]")
+    if [ $FORGE_VERSION = null ]; then
         FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-latest\"]")
         if [ $FORGE_VERSION = null ]; then
             FORGE_SUPPORTED_VERSIONS=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r '.promos| keys[] | rtrimstr("-latest") | rtrimstr("-recommended")' | sort -u | tr '\n' ' ')
             echo "Version $MAINLINE_VERSION is not supported by Forge. Supported versions are $FORGE_SUPPORTED_VERSIONS"
             exit 2
         fi
-#    fi
-#fi
+    fi
+else
+    FORGE_VERSION="noforge"
+fi
 
-echo Preparing the context...
+echo "Preparing the context..."
 
 verfolder=".build-cache/server-$VERSION_TAG"
 mkdir -p $verfolder
@@ -60,6 +62,16 @@ fi
 
 cd ../..
 cp minecraft-server.sh Dockerfile "$verfolder"
+
+# use dynamic tagging to switch base images
+version_slug=$(echo $MAINLINE_VERSION | cut -d . -f 2)
+if [[ $version_slug -le 16 ]]; then
+    docker pull openjdk:8-jre-alpine
+    docker tag openjdk:8-jre-alpine java-base-image
+else
+    docker pull openjdk:16-alpine
+    docker tag openjdk:16-alpine java-base-image
+fi
 
 docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG --build-arg FORGE_INSTALLER="forge-$MAINLINE_VERSION-$FORGE_VERSION-installer.jar"
 

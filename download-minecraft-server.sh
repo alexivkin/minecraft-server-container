@@ -18,8 +18,12 @@ fi
 
 SERVER="minecraft_server.$VERSION.jar"
 
-echo -n "Downloading minecraft server $VERSION ..."
-curl -sSL -o $SERVER $(curl -s $(curl -s $VERSIONS_JSON | \
-    jq --arg VERSION "$VERSION" --raw-output '[.versions[]|select(.id == $VERSION)][0].url') | jq --raw-output '.downloads.server.url')
-
-echo "done"
+if [[ -f $SERVER ]]; then
+    echo "Minecraft server $VERSION already downloaded"
+else
+    echo -n "Downloading minecraft server $VERSION ..."
+    # triplecurl for the win!
+    curl -sSL -o $SERVER $(curl -s $(curl -s $VERSIONS_JSON | \
+        jq --arg VERSION "$VERSION" --raw-output '[.versions[]|select(.id == $VERSION)][0].url') | jq --raw-output '.downloads.server.url')
+    echo "done"
+fi

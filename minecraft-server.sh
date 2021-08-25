@@ -35,5 +35,6 @@ fi
 if [[ -f forge*.jar ]]; then
     java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar forge*.jar nogui
 else
-    java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar minecraft_server*.jar nogui
+    #java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar minecraft_server*.jar nogui
+    java -Xmx${MEMORY} -Xms${MEMORY} -XX:ParallelGCThreads=$CPUCOUNT -jar minecraft_server*.jar nogui
 fi

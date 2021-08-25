@@ -1,5 +1,5 @@
-#
-FROM openjdk:8-jre-alpine
+# java-base-image is a tag dynamically set in the build-image.sh
+FROM java-base-image
 
 MAINTAINER Alex Ivkin <alex@ivkin.net>
 

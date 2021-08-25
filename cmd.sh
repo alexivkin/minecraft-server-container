@@ -16,4 +16,5 @@ time=$(date +%Y-%m-%dT%T.%N)
 commands="${@:2}"
 # crazy quoting below to allow passing commands from the command line with spaces in them
 docker exec minecraft-server-$NAME sh -c 'echo "'"$commands"'" > /proc/$(pgrep -f ^java)/fd/0'
+sleep 1 # a wait for the command to be done running
 docker logs --since "$time" minecraft-server-$NAME
