@@ -68,9 +68,12 @@ version_slug=$(echo $MAINLINE_VERSION | cut -d . -f 2)
 if [[ $version_slug -le 16 ]]; then
     docker pull openjdk:8-jre-alpine
     docker tag openjdk:8-jre-alpine java-base-image
-else
+elif [[ $version_slug -le 17 ]]; then
     docker pull openjdk:16-alpine
     docker tag openjdk:16-alpine java-base-image
+else
+    docker pull openjdk:17-alpine
+    docker tag openjdk:17-alpine java-base-image
 fi
 
 docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG --build-arg FORGE_INSTALLER="forge-$MAINLINE_VERSION-$FORGE_VERSION-installer.jar"
