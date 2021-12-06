@@ -1,7 +1,7 @@
 # java-base-image is a tag dynamically set in the build-image.sh
 FROM java-base-image
 
-MAINTAINER Alex Ivkin <alex@ivkin.net>
+MAINTAINER Alex Ivkin
 
 ENV UID=1000 GID=1000
 

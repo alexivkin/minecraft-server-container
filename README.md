@@ -9,13 +9,11 @@ Start by building the docker image for the server version you need. Run `build-i
 
 ## Running
 
-Create a file with a name of your server and extension .env using the `server.env.example` as an example. Then run 
+Create a file with a name of your server and extension `.env` using the `server.env.example` as an example. Then run 
 
 `./run.sh <server_name>.env [-f]`
 
 `-f` will run the server in the foreground
-
-By running it you accept the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula)
 
 ## Mods
 
@@ -26,3 +24,5 @@ Everything fron the `world-$NAME-extras/` foldeer will be copied under `/data/` 
 * To send commands to the server inside the container use `cmd`
 * To backup the world files run `backup.sh`
 * To stop the server run `stop` or type `stop` in the server console if it's running in foreground. It'll give it a chance to save the world before shutting down.
+
+By running the Minecraft server you accept the [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula)
