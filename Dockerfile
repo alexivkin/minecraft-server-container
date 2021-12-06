@@ -1,4 +1,4 @@
-# java-base-image is a tag dynamically set in the build-image.sh
+# "java-base-image" is a tag dynamically set to the required java image in the build-image.sh script
 FROM java-base-image
 
 MAINTAINER Alex Ivkin
@@ -6,7 +6,6 @@ MAINTAINER Alex Ivkin
 ENV UID=1000 GID=1000
 
 COPY minecraft-server.sh /
-#COPY server.properties *.jar /data/
 COPY *.jar /data/
 COPY libraries/ /data/libraries/
 

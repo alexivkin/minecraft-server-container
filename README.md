@@ -6,6 +6,7 @@ It's fully pre-built, so it starts quickly.
 ## Building
 
 Start by building the docker image for the server version you need. Run `build-image.sh` with the Minecraft Server Version or "latest" for the latest version. If the version ends in "-forge" then the forge server will be built.
+Once the server image of the required version is built you will not need to re-build it agian.
 
 ## Running
 
@@ -17,7 +18,7 @@ Create a file with a name of your server and extension `.env` using the `server.
 
 ## Mods
 
-Everything fron the `world-$NAME-extras/` foldeer will be copied under `/data/` during the server start, so you can put your `mods/` and `shaderpacks/` there
+Everything fron the `world-$NAME-extras/` folder will be copied under `/data/` during the server start, so you can put your `mods/` and `shaderpacks/` there
 
 ## Tools
 
