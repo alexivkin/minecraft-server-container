@@ -26,10 +26,10 @@ fi
 . $CONFIG
 
 if [[ $force == "false" ]]; then
-    ./cmd.sh $CONFIG say "SERVER SHUTTING DOWN. Saving map..."
-    ./cmd.sh $CONFIG save-all
-    #sleep 10
-    ./cmd.sh $CONFIG stop
+    ./cmd $CONFIG say "SERVER SHUTTING DOWN. Saving map..."
+    ./cmd $CONFIG save-all
+    sleep 2
+    ./cmd $CONFIG stop
     sleep 2
 fi
 
