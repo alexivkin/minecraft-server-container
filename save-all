@@ -1,2 +1,4 @@
 # save data on all servers
-for i in *.env; do ./cmd.sh $i save-all; done
+for i in *.env; do 
+	./cmd $i save-all 
+done
