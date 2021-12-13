@@ -35,12 +35,20 @@ NAME=${CONFIG%%.*}
 
 # sanity checks
 if [[ ! -f $CONFIG ]]; then
-    echo "Missing configuration file $CONFIG. It's a bash env file settings"
+    echo "Missing configuration file $CONFIG. It's a bash env file settings."
     exit 1
 fi
 
 # source all the configs now, including version
 . $CONFIG
+
+if ! docker images -q alexivkin/minecraft-server:$VER | grep . >/dev/null; then
+    docker pull alexivkin/minecraft-server:$VER || true
+    if ! docker images -q alexivkin/minecraft-server:$VER | grep . >/dev/null; then
+       echo "Missing server image for $VER. Building..."
+       ./build-image.sh $VER
+    fi
+fi 
 
 # pre-create the folder so docker does not create it as root
 mkdir -p $(pwd)/world-$NAME
