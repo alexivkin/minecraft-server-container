@@ -49,14 +49,15 @@ fi
 
 echo "Preparing the context..."
 
-verfolder=".build-cache/server-$VERSION_TAG"
-mkdir -p $verfolder
-cd $verfolder
-
 if [[ $forge ]]; then
+    verfolder=".build-cache/server-$MAINLINE_VERSION-forge"
+    mkdir -p $verfolder
+    cd $verfolder
     ../../download-forge-server.sh $MAINLINE_VERSION
 else
-    mkdir -p libraries
+    verfolder=".build-cache/server-$MAINLINE_VERSION"
+    mkdir -p "$verfolder/libraries"
+    cd $verfolder
     ../../download-minecraft-server.sh $MAINLINE_VERSION
 fi
 
@@ -78,8 +79,9 @@ fi
 
 docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG --build-arg FORGE_INSTALLER="forge-$MAINLINE_VERSION-$FORGE_VERSION-installer.jar"
 
-if [[ $1 == "latest" ]]; then
-    docker tag alexivkin/minecraft-server:$VERSION_TAG latest
+if [[ $VERSION_TAG == "latest" ]]; then
+    # add a tag with the actual version
+    docker tag alexivkin/minecraft-server:$VERSION_TAG alexivkin/minecraft-server:$MAINLINE_VERSION
 fi
 
 #rm -rf $verfolder
