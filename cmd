@@ -11,9 +11,9 @@ fi
 CONFIG=$1 #"$NAME.env"
 NAME=${CONFIG%%.*}
 
-time=$(date +%Y-%m-%dT%T.%N)
 # grab all commands past the first argument
 commands="${@:2}"
+time=$(date +%Y-%m-%dT%T.%N)
 # crazy quoting below to allow passing commands from the command line with spaces in them
 docker exec minecraft-server-$NAME sh -c 'echo "'"$commands"'" > /proc/$(pgrep -f ^java)/fd/0'
 sleep 1 # a wait for the command to be done running

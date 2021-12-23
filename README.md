@@ -1,7 +1,12 @@
 # Small and secure minecraft server
 
-A simple minecraft server launcher, supporting multiple mainline and Forge servers. Runs in a docker container and, unlike other docker minecraft servers, it does not need to download anything when starting.
-It's fully pre-built, so it starts quickly.
+A minecraft server launcher with the following features:
+
+* supporting multiple mainline and Forge servers running at the same time
+* runs in a docker container, fully isolated from the host
+* handles stop/shutdown correctly, saving the world data before existing
+* automatically restarts if the minecraft server crashes
+* starts quickly, unlike other docker minecraft servers that download code each time they start,
 
 ## Building
 

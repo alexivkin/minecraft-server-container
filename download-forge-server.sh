@@ -35,7 +35,6 @@ esac
         echo "Version $MAINLINE_VERSION is not supported by Forge. Supported versions are $FORGE_SUPPORTED_VERSIONS"
         exit 2
     fi
-
 #fi
 
 # temp bugfix
@@ -64,13 +63,16 @@ else
     echo "Forge installer $FORGE_INSTALLER is already downloaded"
 fi
 
+# forge has backported the installer to at least 1.12.2 so now we just run it during the docker build, without checking for the version
+# look after the exit command for the manual installer
+
 # for versions 27 and onward (minecraft 1.14) download the installer and run it during the Docker build
-if [[ ${FORGE_VERSION%%.*} -ge 27 ]]; then
+#if [[ ${FORGE_VERSION%%.*} -ge 27 ]]; then
 #if [[ $MAINLINE_VERSION =~ 1\.[1-9][4-9].* ]]; then
     #export RUN_INSTALLER="true" # pass the flag to the
     mkdir -p libraries # for compatibility with the generic dockerfile
     exit 0
-fi
+#fi
 
 # for older versions do a manuall install below:
 

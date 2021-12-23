@@ -24,7 +24,7 @@ if [[ $MAINLINE_VERSION == "latest" ]]; then
     MAINLINE_VERSION=$(curl -fsSL $VERSIONS_JSON | jq -r '.latest.release')
 fi
 
-echo Checking the version ...
+echo "Checking the version ..."
 # check if the version is valid for the mainline server (prereq for forge as well)
 MAINLINE_URL=$(curl -s $VERSIONS_JSON | jq --arg VERSION "$MAINLINE_VERSION" --raw-output '[.versions[]|select(.id == $VERSION)][0].url')
 if [[ "$MAINLINE_URL" == "null" ]]; then
@@ -34,15 +34,15 @@ fi
 
 # check if the forge version for this serevr exists
 if [[ $forge ]]; then
-    FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-recommended\"]")
-    if [ $FORGE_VERSION = null ]; then
+#    FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-recommended\"]")
+#    if [ $FORGE_VERSION = null ]; then
         FORGE_VERSION=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r ".promos[\"$MAINLINE_VERSION-latest\"]")
         if [ $FORGE_VERSION = null ]; then
             FORGE_SUPPORTED_VERSIONS=$(curl -fsSL $FORGE_VERSIONS_JSON | jq -r '.promos| keys[] | rtrimstr("-latest") | rtrimstr("-recommended")' | sort -u | tr '\n' ' ')
             echo "Version $MAINLINE_VERSION is not supported by Forge. Supported versions are $FORGE_SUPPORTED_VERSIONS"
             exit 2
         fi
-    fi
+#    fi
 else
     FORGE_VERSION="noforge"
 fi
@@ -62,7 +62,7 @@ else
 fi
 
 cd ../..
-cp minecraft-server.sh Dockerfile "$verfolder"
+cp -a minecraft-server.sh "$verfolder"
 
 # use dynamic tagging to switch base images
 version_slug=$(echo $MAINLINE_VERSION | cut -d . -f 2)
@@ -77,11 +77,15 @@ else
     docker tag openjdk:17-alpine java-base-image
 fi
 
-docker build $verfolder -t alexivkin/minecraft-server:$VERSION_TAG --build-arg FORGE_INSTALLER="forge-$MAINLINE_VERSION-$FORGE_VERSION-installer.jar"
+docker build $verfolder -f ./Dockerfile -t alexivkin/minecraft-server:$VERSION_TAG --build-arg FORGE_INSTALLER="forge-$MAINLINE_VERSION-$FORGE_VERSION-installer.jar"
 
-if [[ $VERSION_TAG == "latest" ]]; then
+if [[ $VERSION_TAG == latest* ]]; then
     # add a tag with the actual version
-    docker tag alexivkin/minecraft-server:$VERSION_TAG alexivkin/minecraft-server:$MAINLINE_VERSION
+    if [[ $forge ]]; then
+        docker tag alexivkin/minecraft-server:$VERSION_TAG alexivkin/minecraft-server:$MAINLINE_VERSION-forge
+    else
+        docker tag alexivkin/minecraft-server:$VERSION_TAG alexivkin/minecraft-server:$MAINLINE_VERSION
+    fi
 fi
 
 #rm -rf $verfolder

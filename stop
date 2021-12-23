@@ -29,8 +29,8 @@ if [[ $force == "false" ]]; then
     ./cmd $CONFIG say "SERVER SHUTTING DOWN. Saving map..."
     ./cmd $CONFIG save-all
     sleep 2
-    ./cmd $CONFIG stop
-    sleep 2
+    #./cmd $CONFIG stop  # running the stop command will trigger a container auto-restart
+    #sleep 2
 fi
 
 # stop with the docker command so it does not autorestart
