@@ -1,0 +1,38 @@
+#/bin/bash
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+    echo Give me the name of the server .env file. Use -f to stop without warning
+    exit 0
+fi
+
+if [[ $# -eq 2 && $2 == "-f" ]]; then
+    force="true"
+else
+    force="false"
+fi
+
+CONFIG=$1 #"$NAME.env"
+NAME=${CONFIG%%.*}
+
+# sanity checks
+if [[ ! -f $CONFIG ]]; then
+    echo "Missing configuration file '$CONFIG'. Expected a bash env file with settings"
+    exit 1
+fi
+
+# source all the configs now, including version
+. $CONFIG
+
+if [[ $force == "false" ]]; then
+    ./cmd $CONFIG say "SERVER SHUTTING DOWN. Saving map..."
+    ./cmd $CONFIG save-all
+    sleep 2
+    #./cmd $CONFIG stop  # running the stop command will trigger a container auto-restart
+    #sleep 2
+fi
+
+# stop with the docker command so it does not autorestart
+docker stop minecraft-server-$NAME
+docker rm minecraft-server-$NAME
