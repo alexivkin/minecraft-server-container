@@ -9,7 +9,10 @@ fi
 # choose interactive (foreground) or server (background) docker options
 if [[ $# -eq 2 && $2 == "-f" ]]; then
     runopt="-it --rm"
+elif [[ $# -eq 2 && $2 == "-d" ]]; then # debug (drop to shell
+    runopt="-it --rm --entrypoint sh"
 else
+    # run with -i so the STDIO remains attached, but without -t so commands can be piped (a pipe is not a TTY)
     runopt="-d --restart unless-stopped -i"
 fi
 
@@ -46,15 +49,14 @@ if ! docker images -q alexivkin/minecraft-server:$VER | grep . >/dev/null; then
     docker pull alexivkin/minecraft-server:$VER || true
     if ! docker images -q alexivkin/minecraft-server:$VER | grep . >/dev/null; then
        echo "Missing server image for $VER. Building..."
-       ./build-image.sh $VER
+       ./build $VER
     fi
-fi 
+fi
 
 # pre-create the folder so docker does not create it as root
 mkdir -p $(pwd)/world-$NAME
 mkdir -p $(pwd)/world-$NAME-extras
 
-# should run with -i so the STDIO remains attached, but without -t so commands can be piped (a pipe is not a TTY)
 # cant use --env-file $CONFIG - does not support multiline envs
 
 check_and_stop minecraft-server-$NAME

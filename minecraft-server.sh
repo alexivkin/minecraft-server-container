@@ -9,7 +9,7 @@ fi
 rm /data/world/.verify_access
 
 if [[ -z "$MEMORY" || -z "$CPUCOUNT" ]]; then # quotes needed here cause of the -z and the || on the alpine sh
-    echo "Please specify $MEMORY and $CPUCOUNT parameters"
+    echo "Please specify \$MEMORY and \$CPUCOUNT parameters"
     exit
 fi
 
@@ -53,9 +53,14 @@ fi
 mkfifo /data/in
 # block the pipe, so it's open forever. Using days instead of `infinity` because old musl from 8-jre-alpine doesn't support it
 sleep 100000d > /data/in &
-# start forge if one exists
-if [[ -f forge*.jar ]]; then
-    java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar forge*.jar nogui < /data/in &
+# start forge via run file if one exists
+if [[ -f run.sh ]]; then
+    # the grep trick is so java is a child of this shell and would be waited on later
+    $(grep java run.sh) nogui < /data/in &
+elif [[ -f forge*.jar ]]; then
+    # -XX:+CMSIncrementalPacing not supported on newer java
+    # -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+AggressiveOpts
+    java -Xmx${MEMORY} -Xms${MEMORY} -XX:ParallelGCThreads=$CPUCOUNT -jar forge*.jar nogui < /data/in &
 else
     # move to background so we can monitor for SIGTERM in this shell
     #java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar minecraft_server*.jar nogui

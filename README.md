@@ -17,9 +17,10 @@ Once the server image of the required version is built you will not need to re-b
 
 Create a file with a name of your server and extension `.env` using the `server.env.example` as an example. Then run 
 
-`./run.sh <server_name>.env [-f]`
+`./run.sh <server_name>.env [-f|-d]`
 
-`-f` will run the server in the foreground
+* `-f` will run the server in the foreground
+* `-d` will drop into an interactive shell rather than starting the server
 
 ## Mods
 
