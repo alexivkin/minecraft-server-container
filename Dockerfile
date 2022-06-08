@@ -20,7 +20,7 @@ RUN umask 0002  && \
 
 # run forge installer if present
 ARG FORGE_INSTALLER
-RUN cd data && ls $FORGE_INSTALLER && \
+RUN cd data && \
     if ls $FORGE_INSTALLER 1>/dev/null 2>&1; then java -jar $FORGE_INSTALLER --installServer; rm $FORGE_INSTALLER; fi && \
     chown minecraft:minecraft /data/*
 
