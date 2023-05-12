@@ -57,6 +57,7 @@ sleep 100000d > /data/in &
 if [[ -f run.sh ]]; then
     # the grep trick is so java is a child of this shell and would be waited on later
     $(grep java run.sh) nogui < /data/in &
+    sleep .5
 elif [[ -f forge*.jar ]]; then
     # -XX:+CMSIncrementalPacing not supported on newer java
     # -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+AggressiveOpts

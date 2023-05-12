@@ -2,7 +2,7 @@
 
 A minecraft server launcher with the following features:
 
-* supporting multiple mainline and Forge servers running at the same time
+* supports running multiple mainline and Forge servers at the same time
 * runs in a docker container, fully isolated from the host
 * handles stop/shutdown correctly, saving the world data before existing
 * automatically restarts if the minecraft server crashes
@@ -15,7 +15,7 @@ Once the server image of the required version is built you will not need to re-b
 
 ## Running
 
-Create a file with a name of your server and extension `.env` using the `server.env.example` as an example. Then run 
+Create a file with a name of your server and extension `.env` using the `server.env.example` as an example. Then run
 
 `./run.sh <server_name>.env [-f|-d]`
 
