@@ -44,7 +44,7 @@ if [[ $forge ]]; then
         fi
 #    fi
 else
-    FORGE_VERSION="noforge"
+    FORGE_VERSION="noforge" # invalidate the location. It will be checked in the Dockerfile during the build
 fi
 
 echo "Preparing the context..."

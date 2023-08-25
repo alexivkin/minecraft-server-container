@@ -2,16 +2,10 @@
 
 A minecraft server launcher with the following features:
 
-* supports running multiple mainline and Forge servers at the same time
-* runs in a docker container, fully isolated from the host
-* handles stop/shutdown correctly, saving the world data before existing
-* automatically restarts if the minecraft server crashes
-* starts quickly, unlike other docker minecraft servers that download code each time they start,
-
-## Building
-
-Start by building the docker image for the server version you need. Run `build-image.sh` with the Minecraft Server Version or "latest" for the latest version. If the version ends in "-forge" then the forge server will be built.
-Once the server image of the required version is built you will not need to re-build it agian.
+* supports running multiple mainline/vanilla and Forge servers at the same time
+* handles stop/shutdown correctly, saving the world data before exiting
+* starts quickly, unlike other docker minecraft servers that download code each time they start
+* runs in a docker container, fully isolated from the host, restarting automatically server crash
 
 ## Running
 
@@ -22,9 +16,15 @@ Create a file with a name of your server and extension `.env` using the `server.
 * `-f` will run the server in the foreground
 * `-d` will drop into an interactive shell rather than starting the server
 
-## Mods
+If the docker image for the version given in the `.env` file is missing, the image will be built automatically.
 
-Everything fron the `world-$NAME-extras/` folder will be copied under `/data/` during the server start, so you can put your `mods/` and `shaderpacks/` there
+## Forge mods
+
+Put your mods into the `world-$NAME-extras/mods/` subfolder. In fact everything from the `world-$NAME-extras/` folder will be copied into the minecraft server root folder during the server startup, so you can put your `shaderpacks/` and everything else there.
+
+## Building manually
+
+Run `./build` with the Minecraft Server Version or "latest" for the latest version. If the version ends in "-forge" then the Forge server will be built.
 
 ## Tools
 
