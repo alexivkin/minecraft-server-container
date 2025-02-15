@@ -1,11 +1,11 @@
-# Small and secure minecraft server
+# A small and secure minecraft server
 
 A minecraft server launcher with the following features:
 
-* supports running multiple mainline/vanilla and Forge servers at the same time
-* handles stop/shutdown correctly, saving the world data before exiting
-* starts quickly, unlike other docker minecraft servers that download code each time they start
-* runs in a docker container, fully isolated from the host, restarting automatically server crash
+* run multiple mainline/vanilla, Forge and NeoForge servers at the same time, in docker containers isolated from the host.
+* fast start, unlike other docker minecraft servers that download and install minecraft each time they start
+* handle stop/shutdown/restart correctly, saving the world data before exiting
+* send minecraft commands directly from the host
 
 ## Running
 
@@ -18,7 +18,7 @@ Create a file with a name of your server and extension `.env` using the `server.
 
 If the docker image for the version given in the `.env` file is missing, the image will be built automatically.
 
-## Forge mods
+## (Neo)Forge mods
 
 Put your mods into the `world-$NAME-extras/mods/` subfolder. In fact everything from the `world-$NAME-extras/` folder will be copied into the minecraft server root folder during the server startup, so you can put your `shaderpacks/` and everything else there.
 

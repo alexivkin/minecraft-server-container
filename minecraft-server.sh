@@ -53,15 +53,19 @@ fi
 mkfifo /data/in
 # block the pipe, so it's open forever. Using days instead of `infinity` because old musl from 8-jre-alpine doesn't support it
 sleep 100000d > /data/in &
-# start forge via run file if one exists
+# start forge and neoforge via run file if one exists
 if [[ -f run.sh ]]; then
     # the grep trick is so java is a child of this shell and would be waited on later
-    $(grep java run.sh) nogui < /data/in &
+    $(grep java run.sh | tail -1) nogui < /data/in &
     sleep .5
 elif [[ -f forge*.jar ]]; then
     # -XX:+CMSIncrementalPacing not supported on newer java
     # -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+AggressiveOpts
     java -Xmx${MEMORY} -Xms${MEMORY} -XX:ParallelGCThreads=$CPUCOUNT -jar forge*.jar nogui < /data/in &
+elif [[ -f neoforge*.jar ]]; then
+    # -XX:+CMSIncrementalPacing not supported on newer java
+    # -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+AggressiveOpts
+    java -Xmx${MEMORY} -Xms${MEMORY} -XX:ParallelGCThreads=$CPUCOUNT -jar neoforge*.jar nogui < /data/in &
 else
     # move to background so we can monitor for SIGTERM in this shell
     #java -Xmx${MEMORY} -Xms${MEMORY} -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPUCOUNT -XX:+AggressiveOpts -jar minecraft_server*.jar nogui
